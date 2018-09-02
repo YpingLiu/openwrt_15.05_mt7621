@@ -31,7 +31,7 @@ endif
 define Package/base-files
   SECTION:=base
   CATEGORY:=Base system
-  DEPENDS:=+netifd +libc +procd +jsonfilter +SIGNED_PACKAGES:usign
+  DEPENDS:=+netifd +libc +libstdcpp +libpthread +procd +jsonfilter +SIGNED_PACKAGES:usign
   TITLE:=Base filesystem for OpenWrt
   URL:=http://openwrt.org/
   VERSION:=$(PKG_RELEASE)-$(REVISION)
@@ -150,6 +150,7 @@ define Package/base-files/install
 	mkdir -p $(1)/tmp
 	mkdir -p $(1)/usr/lib
 	$(if $(LIB_SUFFIX),-$(LN) lib $(1)/usr/lib$(LIB_SUFFIX))
+	$(CP) ./files/lib/libPPCS_API.so $(1)/usr/lib
 	mkdir -p $(1)/usr/bin
 	mkdir -p $(1)/sys
 	mkdir -p $(1)/www
