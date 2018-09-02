@@ -1,1 +1,41 @@
-/sbin/block hotplug
+#!/bin/ash  
+  
+case "$ACTION" in  
+    add)  
+        for i in $(ls /dev/ | grep 'sd[a-z][1-9]')  
+        do  
+            mkdir -p /mnt/$i  
+	    # vfat & ntfs-3g check
+            if  [ `which fdisk` ]; then
+                    isntfs=`fdisk -l | grep $i | grep NTFS`
+                    isvfat=`fdisk -l | grep $i | grep FAT`
+                    isfuse=`lsmod | grep fuse`
+                    isntfs3g=`which ntfs-3g`
+            else
+                    isntfs=""
+                    isvfat=""
+            fi 
+            # mount with ntfs-3g if possible, else with default mount
+            if [ "$isntfs" -a "$isfuse" -a "$isntfs3g" ]; then
+                    ntfs-3g -o nls=utf8 /dev/$i /mnt/$i
+            elif [ "$isvfat" ]; then
+                    mount -t vfat -o iocharset=utf8,rw,sync,umask=0000,dmask=0000,fmask=0000 /dev/$i /mnt/$i
+            else
+                    mount /dev/$i /mnt/$i
+            fi
+        done  
+        ;;  
+    remove)  
+        MOUNT=`mount | grep -o '/mnt/sd[a-z][1-9]'`  
+        for i in $MOUNT  
+        do  
+            umount $i  
+            if [ $? -eq 0 ]  
+            then  
+                rm -r $i  
+            fi  
+        done  
+        ;;  
+esac  
+
+
