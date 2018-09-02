@@ -961,7 +961,7 @@ endif
 
 define Device/mt7621
   DTS := MT7621
-  IMAGE_SIZE := $(ralink_default_fw_size_4M)
+  IMAGE_SIZE := $(ralink_default_fw_size_16M)
 endef
 
 define Device/wsr-600
