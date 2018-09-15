@@ -241,7 +241,7 @@ sub gen_target_config() {
 	print <<EOF;
 choice
 	prompt "Target System"
-	default TARGET_ar71xx
+	default TARGET_ramips
 	reset if !DEVEL
 	
 EOF
@@ -256,6 +256,7 @@ endchoice
 
 choice
 	prompt "Subtarget" if HAS_SUBTARGETS
+	default TARGET_ramips_mt7621 
 EOF
 	foreach my $target (@target) {
 		next unless $target->{def_subtarget};
