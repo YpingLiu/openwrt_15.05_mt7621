@@ -20,8 +20,8 @@ define Profile/Default
 		kmod-usb-ohci kmod-usb-storage kmod-usb-storage-extras kmod-usb-uhci kmod-usb2 \
 		block-mount libsqlite3 samba36-server ntfs-3g fdisk mount-utils uhttpd uhttpd-mod-ubus \
 		php5 php5-cgi php5-mod-ctype php5-mod-hash php5-mod-pdo php5-mod-pdo-sqlite \
-		php5-mod-session php5-mod-sqlite3 php5-mod-tokenizer php5-mod-xml \
-		vsftpd e2fsprogs
+		php5-mod-session php5-mod-sqlite3 php5-mod-tokenizer php5-mod-xml zoneinfo-asia \
+		vsftpd e2fsprogs 
 endef
 
 define Profile/Default/Description
