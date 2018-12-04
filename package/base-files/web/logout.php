@@ -1,0 +1,9 @@
+<?php
+	header("Content-Type:text/html;charset=utf-8");
+	//登出成功将信息从session中清除
+	$_SESSION['username']='';
+	$_SESSION['islogin']=0;
+	//用户名或密码错误
+	header('Location:login.html');
+	exit;
+?>

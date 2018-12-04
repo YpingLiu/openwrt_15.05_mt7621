@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<link rel="stylesheet" type="text/css" href="css/menu/normalize.css" />
+<link rel="stylesheet" type="text/css" href="css/menu/default.css">
+<link rel="stylesheet" href="css/menu/style.css">
+	<script src="js/menu/jquery.min.js" type="text/javascript"></script>
+	<script>window.jQuery || document.write('<script src="js/menu/jquery.min.js"><\/script>')</script>
+	<script src="js/menu/script.js"></script>
+<script>
+function direct2(path){
+	console.info(path);
+	console.info(window.parent.parent.frames["mainFrame"]);
+	//window.parent.parent.frames["mainFrame"].href=path; 
+	window.parent.parent.frames["mainFrame"].location=path;
+	//console.info($(window.parent.document).find("#mainFrame"));
+	//$(window.parent.document).find("#mainFrame").attr("src","./dirs.html"); 
+}
+
+$(document).ready(function(){
+    $("#logoutBt").click(function(){
+    	if(confirm("确定要退出等录吗？")){
+    		window.parent.parent.location="logout.php";	
+	   	}
+	});
+	$("#changePwdBt").click(function(){
+		direct2("changePwd.php");
+	});	
+});
+
+
+</script>
+</head>
+
+<body style="background-color:#0075c2">
+<article class="htmleaf-container">
+		<div class="htmleaf-content">
+			<ul class="mainmenu">
+				<li><img src="images/menu/key.png" alt="Key icon" class="icon"><span>磁盘管理</span></li>
+					<ul class="submenu">
+						<div class="expand-triangle"></div>
+						<li onclick="direct2('disks.php')"><span>磁盘列表</span></li>
+					</ul>	
+				<li><img src="images/menu/envelope.png" alt="Envelope icon" class="icon"><span>文件管理</span></li>
+					<ul class="submenu">
+						<div class="expand-triangle"></div>
+						<li onclick="direct2('dirs.php')"><span>文件列表</span></li>
+					</ul>					
+				<li><img src="images/menu/cog.png" alt="Cog icon" class="icon"><span>共享服务</span></li>
+					<ul class="submenu">
+						<div class="expand-triangle"></div>
+						<li onclick="direct2('ftp.php')"><span>FTP</span></li>
+						<li onclick="direct2('cifs.php')"><span>CIFS</span></li>
+						<li onclick="direct2('nfs.php')"><span>NFS</span></li>
+					</ul>
+					
+				<!-- <li><img src="images/menu/user.png" alt="User icon" class="icon"><span>系统设置<span></li>
+													<ul class="submenu">
+														<div class="expand-triangle"></div>
+														<li onclick="direct2('changeIp.php')"><span>局域网IP</span></li>
+														<li onclick="direct2('changePwd.php')"><span>修改密码</span></li>
+													</ul> -->								
+				<li id="changePwdBt"><img src="images/menu/key.png" alt="User icon" class="icon"><span>修改密码</span></li>													
+				<li id="logoutBt"><img src="images/menu/key.png" alt="Key icon" class="icon"><span>退出登录</span></li>
+			</ul>
+		</div>
+		
+	</article>
+	
+
+</body>
+</html>
