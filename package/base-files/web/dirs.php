@@ -56,42 +56,50 @@
     </thead>      
      <?php
         //遍历目录
-        $dd=opendir($dir);
-        if($dir!="/mnt/sda1"){
-             $pDir = substr($dir,0,strripos($dir,"/"));
-            //echo 'dir==@='.$dir;
-             echo "<tr>";
-                echo "<td><a href='dirs.php?dir={$pDir}'>..</a></td>";
-                echo "<td></td>";
-                echo "<td></td>";
-                echo "<td></td>";
-            echo "</tr>";
-        }
-        while(false !== ($f=readdir($dd))){
-            //过滤点
-            if($f == "." || $f == ".."){
-                continue;
+        if(is_dir($dir)){
+            $dd=opendir($dir);
+            if($dir!="/mnt/sda1"){
+                 $pDir = substr($dir,0,strripos($dir,"/"));
+                //echo 'dir==@='.$dir;
+                echo "<tr>";
+                    echo "<td><a href='dirs.php?dir={$pDir}'>..</a></td>";
+                    echo "<td></td>";
+                    echo "<td></td>";
+                    echo "<td></td>";
+                echo "</tr>";
             }
-            //拼路径
-            $file=rtrim($dir,"/")."/".$f;
-            //防止中文乱码
-            //$f2=iconv("gb2312","utf-8",$f);
-            echo "<tr>";
-                if(is_file($file))
-                    echo "<td><img src='./images/file.png'/>{$f}</td>";
-                else
-                    echo "<td><a href='dirs.php?dir={$file}'><img src='./images/dir.png'/>&nbsp{$f}</a></td>";
-                echo "<td>".filetype($file)."</td>";
-                echo "<td>".filesize($file)."</td>";
-                //echo "<td>".filectime($file)."</td>";
-                //echo "<td>".date('Y-m-d H:i:s',filectime($file))."123</td>";
-                echo "<td align='center'>
-                        <a href='index.php?a=edit&filename={$file}'>修改</a>|
-                        <a href='index.php?a=del&filename={$file}'>删除</a>
-                      </td>";
-            echo "</tr>";
-        
+            while(false !== ($f=readdir($dd))){
+                //过滤点
+                if($f == "." || $f == ".."){
+                    continue;
+                }
+                //拼路径
+                $file=rtrim($dir,"/")."/".$f;
+                //防止中文乱码
+                //$f2=iconv("gb2312","utf-8",$f);
+                echo "<tr>";
+                    if(is_file($file))
+                        echo "<td><img src='./images/file.png'/>{$f}</td>";
+                    else
+                        echo "<td><a href='dirs.php?dir={$file}'><img src='./images/dir.png'/>&nbsp{$f}</a></td>";
+                    echo "<td>".filetype($file)."</td>";
+                    echo "<td>".filesize($file)."</td>";
+                    //echo "<td>".filectime($file)."</td>";
+                    //echo "<td>".date('Y-m-d H:i:s',filectime($file))."123</td>";
+                    echo "<td align='center'>
+                            <a href='index.php?a=edit&filename={$file}'>修改</a>|
+                            <a href='index.php?a=del&filename={$file}'>删除</a>
+                          </td>";
+                echo "</tr>";
+            
+            }
         }
+        else{
+            echo "<tr>";
+                echo "<td colspan='4'>尚未安装磁盘</td>";
+            echo "</tr>";
+        }
+        
     ?>
 </table>
 </form>
