@@ -19,7 +19,8 @@
                 break;
             case 'del':
                 //删除文件
-                unlink($_GET['filename']);
+                //unlink($_GET['filename']);
+				deldir($_GET['filename']);
                 break;
             case 'update':
                 //修改文件
@@ -30,6 +31,39 @@
         }
     }
 
+	function deldir($fname)
+	{
+		if(is_dir($fname))
+		{
+			//在删除之前，把里面的文件全部删掉
+			$dir = opendir($fname);
+			while($dname = readdir($dir))
+			{
+							 //必须加这一项，不然可能会将整个磁盘给删掉
+				if($dname!="." && $dname!="..")
+				{
+					$durl = $fname."/".$dname;
+					if(is_file($durl))
+					{
+						unlink($durl);
+					}
+					else
+					{
+						deldir($durl);
+					}
+				}
+			}
+			closedir($dir);
+			//删除该文件夹
+			rmdir($fname); 
+		}
+		else
+		{
+			//如果是文件，直接删掉
+			unlink($fname);
+		}
+	}
+	
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
@@ -87,8 +121,7 @@
                     //echo "<td>".filectime($file)."</td>";
                     //echo "<td>".date('Y-m-d H:i:s',filectime($file))."123</td>";
                     echo "<td align='center'>
-                            <a href='index.php?a=edit&filename={$file}'>修改</a>|
-                            <a href='index.php?a=del&filename={$file}'>删除</a>
+                            <a href='dirs.php?a=del&filename={$file}'>删除</a>
                           </td>";
                 echo "</tr>";
             

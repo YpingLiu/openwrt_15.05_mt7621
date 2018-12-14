@@ -1,14 +1,20 @@
+#!/usr/bin/php-cgi
 <?php 
     //先判断$_GET['a']是否已经传值 防止NOTICE错误
+    echo isset($_GET['a']);
+    echo "test\n";
     if(isset($_GET['a'])){
         //选择判断要执行的操作
+	echo ($_GET['a']);
         switch($_GET['a']){
             case 'format':
-                //新建文件
-                //$filename=$_POST["filename"];
-                //$filename=rtrim($dir,"/")."/".$filename;
-                //写入文件 写入一个空字符串
-                //file_put_contents($filename,"");
+				//修改最大执行时间
+//		ini_set('max_execution_time', '60');
+		set_time_limit(0);
+                $path = $_GET['path'];
+                $cmd = "/www/script/fdisk.sh mkfs ".$path;
+		exec($cmd);
+		echo $cmd;
                 break;
         }
     }
@@ -69,8 +75,8 @@
 </body>
 <script type="text/javascript">
 function diskFormat(path){
-    if(confirm("Are you sure to format selected disk?")){
-        if(confirm("All data will be lose!!!")){
+    if(confirm("真的要格式化所选磁盘吗？")){
+        if(confirm("该磁盘的所有数据将会被删除！确定要继续格式化吗？")){
             location.href="disks.php?a=format&path="+path;
             return;
         }
