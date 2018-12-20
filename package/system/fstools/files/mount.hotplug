@@ -4,7 +4,8 @@ case "$ACTION" in
     add)  
         for i in $(ls /dev/ | grep 'sd[a-z][1-9]')  
         do  
-            mkdir -p /mnt/$i  
+            mkdir -p /mnt/$i 
+	    chmod 777 /mnt/$i
 	    # vfat & ntfs-3g check
             if  [ `which fdisk` ]; then
                     isntfs=`fdisk -l | grep $i | grep NTFS`
@@ -22,6 +23,14 @@ case "$ACTION" in
                     mount -t vfat -o iocharset=utf8,rw,sync,umask=0000,dmask=0000,fmask=0000 /dev/$i /mnt/$i
             else
                     mount /dev/$i /mnt/$i
+    	    fi
+
+	    #echo "[lyp] $?" >> /tmp/test.txt
+            #mount failed , rm /mnt/$i
+            if [ $? -ne 0 ]
+            then
+		#echo "rm -r /mnt/$i" >> /tmp/test.txt
+            	rm -r /mnt/$i
             fi
         done  
         ;;  
