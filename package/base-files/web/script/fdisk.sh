@@ -24,12 +24,14 @@ fdisk_handle2() {
         fdisk $para2 < /www/script/fdisk_param.txt
         return $RETVAL
 }
+
 fdisk_handle() {
 	#/dev/sda1
 	name4=${para2##*/}  #sda1
 	name3=${name4:0:3}  #sda
 	name8=${para2:0:8}  #/dev/sda
-	count2=`ls /dev/sd* | grep ${name3}[0-9] -c`
+	#count2=`ls /dev/sd* | grep ${name3}[0-9] -c`
+	count2=`fdisk -l | grep sd[a-z][1-9] | wc -l`
 	echo $count2
 	if [ $count2 -gt 0 ]
 	then
@@ -40,8 +42,32 @@ fdisk_handle() {
 	fi
         return $RETVAL
 }
-mkfs_handle() {
+
+check_fat_ntfs(){
+	para3=${para2:0:8}  #/dev/sda
+	isvfat=`fdisk -l | grep [1-9] | grep FAT | wc -l`
+	isntfs=`fdisk -l | grep [1-9] | grep NTFS | wc -l`
+	if [ $isvfat -gt 0 ] || [ $isntfs -gt 0 ]
+	then
+		echo "Disk type is vfat or ntfs"
+		fdisk $para3 < /www/script/fdisk_type.txt
+	else
+		echo "Disk type is ext"
+	fi
+}
+
+mount_handle() {
+	echo "lyp  /mnt/${para2#*/dev/}" > /tmp/test.txt
+	if [ ! -d "/mnt/${para2#*/dev/}" ]
+	then
+		mkdir -p /mnt/${para2#*/dev/}
+	fi
 	
+	mount $para2 /mnt/${para2#*/dev/} > /dev/null
+}
+
+mkfs_handle() {
+	check_fat_ntfs
 
         mkfs.ext4 $para2
         return $RETVAL
@@ -60,8 +86,8 @@ mkfs_fail_handle() {
 		/etc/init.d/vsftpd start                           
         	/etc/init.d/samba start          
                 mkfs_handle > /dev/null    
-                                                          
-                mount $para2 /mnt/${para2#*/dev/} > /dev/null
+          
+		mount_handle                                               
         else                                             
                 echo "Umount Failed!"                     
                 mkfs_fail_handle                          
@@ -83,7 +109,7 @@ case "$para1" in
 		echo "Umount succeed"
 		mkfs_handle > /dev/null
 		
-		mount $para2 /mnt/${para2#*/dev/} > /dev/null
+		mount_handle
 	    else
 		echo "Umount Failed!"
 		mkfs_fail_handle
@@ -91,7 +117,7 @@ case "$para1" in
 	else
 	    echo "It's not mounted."
 	    mkfs_handle > /dev/null
-	    mount $para2 /mnt/${para2#*/dev/} > /dev/null
+	    mount_handle
 	fi
         
         ;;
